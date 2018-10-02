@@ -1,0 +1,237 @@
+Ejercicio 1 Semana 16
+PUNTO 1
+1. Crear una base de datos llamada call_list
+
+postgres=# CREATE DATABASE call_list;
+CREATE DATABASE
+postgres=# \c call_list;
+You are now connected to database "call_list" as user "postgres".
+
+PUNTO 2
+2. En la base de datos recien creada, crear la tabla users con los campos id (clave
+primaria), first_name, email.
+
+call_list=# CREATE TABLE users (id serial PRIMARY KEY, first_name VARCHAR(60), email VARCHAR(60));
+CREATE TABLE
+call_list=# 
+call_list=# SELECT * FROM users;
+ id | first_name | email 
+----+------------+-------
+(0 rows)
+
+
+PUNTO 3
+3. Ingresar un usuario, llamado Carlos (el resto de los datos deben inventarlos).
+
+call_list=# INSERT INTO users (first_name, email) VALUES ('Carlos', 'carlos@mail.com');
+INSERT 0 1
+call_list=# SELECT * FROM users;
+ id | first_name |      email      
+----+------------+-----------------
+  1 | Carlos     | carlos@mail.com
+(1 row)
+
+
+
+PUNTO 4
+4. Ingresar un usuario, llamada Laura (el resto de los datos deben inventarlos)
+
+call_list=# INSERT INTO users (first_name, email) VALUES ('Laura', 'laura@mail.com');
+INSERT 0 1
+call_list=# SELECT * FROM users;
+ id | first_name |      email      
+----+------------+-----------------
+  1 | Carlos     | carlos@mail.com
+  2 | Laura      | laura@mail.com
+(2 rows)
+
+
+
+PUNTO 5
+5. Crear una tabla llamada calls con los campos id (clave primaria), phone, date,
+user_id (foreign key relacionado a users).
+
+call_list=# CREATE TABLE calls (id SERIAL PRIMARY KEY, phone INTEGER, date DATE, user_id INTEGER);
+CREATE TABLE
+call_list=# SELECT * FROM calls;
+ id | phone | date | user_id 
+----+-------+------+---------
+(0 rows)
+
+call_list=# ALTER TABLE calls ADD CONSTRAINT userfk FOREIGN KEY (user_id) REFERENCES users (id);
+ALTER TABLE
+
+
+PUNTO 6
+
+call_list=# ALTER TABLE users ADD COLUMN last_name VARCHAR(64);
+ALTER TABLE
+
+call_list=# SELECT * FROM users;
+ id | first_name |      email      | last_name 
+----+------------+-----------------+-----------
+  1 | Carlos     | carlos@mail.com | 
+  2 | Laura      | laura@mail.com  | 
+(2 rows)
+
+call_list=# 
+
+Punto 7
+
+
+call_list=# UPDATE users SET last_name = 'Perez' WHERE id = 1;
+UPDATE 1
+call_list=# SELECT * FROM users;
+ id | first_name |      email      | last_name 
+----+------------+-----------------+-----------
+  2 | Laura      | laura@mail.com  | 
+  1 | Carlos     | carlos@mail.com | Perez
+(2 rows)
+
+PUNTO 8 
+call_list=# UPDATE users SET last_name = 'Gonzalez' WHERE id = 2;
+UPDATE 1
+call_list=# SELECT * FROM users;
+ id | first_name |      email      | last_name 
+----+------------+-----------------+-----------
+  1 | Carlos     | carlos@mail.com | Perez
+  2 | Laura      | laura@mail.com  | Gonzalez
+(2 rows)
+
+call_list=# 
+
+PUNTO 9
+
+call_list=# INSERT INTO calls (phone, date, user_id) VALUES (94423867,'01/02/2018', 2);
+INSERT 0 1
+
+call_list=# select * from calls
+call_list-# ;
+ id |  phone   |    date    | user_id 
+----+----------+------------+---------
+  1 | 94423867 | 2018-02-01 |       2
+(1 row)
+
+call_list=# INSERT INTO calls (phone, date, user_id) VALUES (944456897,'04/03/2018', 2);
+INSERT 0 1
+call_list=# INSERT INTO calls (phone, date, user_id) VALUES (923456797,'05/03/2018', 2);
+INSERT 0 1
+call_list=# INSERT INTO calls (phone, date, user_id) VALUES (223345678,'05/03/2018', 2);
+INSERT 0 1
+call_list=# INSERT INTO calls (phone, date, user_id) VALUES (226167433,'06/04/2018', 2);
+INSERT 0 1
+call_list=# select * from calls                                              
+;
+ id |   phone   |    date    | user_id 
+----+-----------+------------+---------
+  1 |  94423867 | 2018-02-01 |       2
+  2 | 944456897 | 2018-03-04 |       2
+  3 | 923456797 | 2018-03-05 |       2
+  4 | 223345678 | 2018-03-05 |       2
+  5 | 226167433 | 2018-04-06 |       2
+(5 rows)
+
+call_list=# INSERT INTO calls (phone, date, user_id) VALUES (984556633,'07/05/2018', 2);
+INSERT 0 1
+call_list=# select * from calls                                                         
+;
+ id |   phone   |    date    | user_id 
+----+-----------+------------+---------
+  1 |  94423867 | 2018-02-01 |       2
+  2 | 944456897 | 2018-03-04 |       2
+  3 | 923456797 | 2018-03-05 |       2
+  4 | 223345678 | 2018-03-05 |       2
+  5 | 226167433 | 2018-04-06 |       2
+  6 | 984556633 | 2018-05-07 |       2
+(6 rows)
+
+PUNTO 10
+call_list=# INSERT INTO calls (phone, date, user_id) VALUES (345673223,'02/02/2018', 1);
+INSERT 0 1
+call_list=# INSERT INTO calls (phone, date, user_id) VALUES (229874454,'04/03/2018', 1);
+INSERT 0 1
+call_list=# INSERT INTO calls (phone, date, user_id) VALUES (983526733,'05/03/2018', 1);
+INSERT 0 1
+call_list=# INSERT INTO calls (phone, date, user_id) VALUES (674256989,'07/04/2018', 1);
+INSERT 0 1
+call_list=# select * from calls                                                         
+;
+ id |   phone   |    date    | user_id 
+----+-----------+------------+---------
+  1 |  94423867 | 2018-02-01 |       2
+  2 | 944456897 | 2018-03-04 |       2
+  3 | 923456797 | 2018-03-05 |       2
+  4 | 223345678 | 2018-03-05 |       2
+  5 | 226167433 | 2018-04-06 |       2
+  6 | 984556633 | 2018-05-07 |       2
+  7 | 345673223 | 2018-02-02 |       1
+  8 | 229874454 | 2018-03-04 |       1
+  9 | 983526733 | 2018-03-05 |       1
+ 10 | 674256989 | 2018-04-07 |       1
+(10 rows)
+
+
+PUNTO 11
+call_list=# INSERT INTO users (first_name, email, last_name) VALUES ('Pedro', 'pedro@gmail.com','Rojas');
+INSERT 0 1
+call_list=# select * from users;
+ id | first_name |      email      | last_name 
+----+------------+-----------------+-----------
+  1 | Carlos     | carlos@mail.com | Perez
+  2 | Laura      | laura@mail.com  | Gonzalez
+  3 | Pedro      | pedro@gmail.com | Rojas
+(3 rows)
+
+call_list=# 
+PUNTO 12
+call_list=# SElECT first_name, COUNT(phone) FROM users FULL JOIN calls ON (users.id = calls.user_id) GROUP BY first_name;
+ first_name | count 
+------------+-------
+ Carlos     |     4
+ Pedro      |     0
+ Laura      |     6
+(3 rows)
+
+
+PUNTO 13
+
+call_list=# SELECT phone, date FROM users INNER JOIN calls ON(users.id = calls.user_id) WHERE users.first_name = 'Carlos' ORDER BY calls.date DESC;
+   phone   |    date    
+-----------+------------
+ 674256989 | 2018-04-07
+ 983526733 | 2018-03-05
+ 229874454 | 2018-03-04
+ 345673223 | 2018-02-02
+(4 rows)
+
+call_list=# 
+
+Nuevos cambios solicitados por cliente.
+"Necesito agregar a la base una tabla de auditoría que registre el
+motivo del borrado de una llamada y el usuario que lo efectuó."
+
+call_list=# CREATE TABLE auditoria(id SERIAL, motivo VARCHAR(100), user_id INTEGER);
+call_list=# ALTER TABLE auditoria ADD COLUMN phone VARCHAR(30);
+ALTER TABLE
+call_list=# ALTER TABLE auditoria ADD COLUMN date DATE;
+ALTER TABLE
+call_list=# ALTER TABLE auditoria ADD COLUMN erase_date DATE;
+ALTER TABLE
+call_list=# 
+
+PUNTO 14
+
+Modelar bases de datos es la semana 17, lo completaré esa semana.
+ ||
+(..)
+  ~
+
+
+
+
+
+
+
+
+
+
